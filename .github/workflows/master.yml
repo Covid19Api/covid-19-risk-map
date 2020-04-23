@@ -1,5 +1,5 @@
-     
 name: CD
+
 on:
   pull_request:
   push:
@@ -9,22 +9,23 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-        
+
     steps:
     - uses: actions/checkout@v2
-      
+
     - name: Use Node.js
       uses: actions/setup-node@v1
-      
+
     - name: NPM Install
       run: |
         npm install --only=production
-        
+
     - name: Production Build
       run: |
         npm build
 
     - name: Deploy to S3
+      if: contains(github.ref, "master")
       uses: jakejarvis/s3-sync-action@master
       with:
         args: --acl public-read --delete
