@@ -25,7 +25,7 @@ jobs:
         npm build
 
     - name: Deploy to S3
-      if: contains(github.ref, "master")
+      if: contains(github.ref, 'master')
       uses: jakejarvis/s3-sync-action@master
       with:
         args: --acl public-read --delete
