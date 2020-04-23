@@ -52,8 +52,6 @@ export const Map = (props: MapCoordinateState) => {
   }, [props.lat, props.lng])
 
   function setUserLocation(e: any) {
-    console.log(e);
-    console.log(typeof e);
     (map.getSource('single-point') as any).setData(e.data);
   }
 

@@ -5,7 +5,7 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import mapboxgl from 'mapbox-gl';
 
-mapboxgl.accessToken = 'pk.eyJ1Ijoic3Byb2oiLCJhIjoiY2s5YnI5ZXVmMDc0OTNvbnk0eTN6enYyayJ9.Mewt68SdJMZuqL4aS1sByg'
+mapboxgl.accessToken = process.env.REACT_APP_MAPGL_API_TOKEN!
 
 ReactDOM.render(
   <React.StrictMode>
