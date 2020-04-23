@@ -1,5 +1,6 @@
 import * as React from 'react'
 import mapboxgl from 'mapbox-gl'
+import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder'
 import { coordinatesReducer, MapCoordinateState } from './hooks/useCoordinatesReducer'
 
 export const Map = (props: MapCoordinateState) => {
@@ -36,18 +37,26 @@ export const Map = (props: MapCoordinateState) => {
         }
       });
     })
-    const geocoder = new mapboxgl.GeolocateControl({
+    const locateMeGeocoder = new mapboxgl.GeolocateControl({
       positionOptions: {
         enableHighAccuracy: true
       },
       trackUserLocation: true
     })
 
+    const inputGeoCoder = new MapboxGeocoder({
+      accessToken: mapboxgl.accessToken,
+      mapboxgl: mapboxgl
+      })
+
     // Add geolocate control to the map.
-    map.addControl(geocoder);
-    geocoder.on('geolocate', setUserLocation);
-    geocoder.on('trackuserlocationstart', setUserLocation);
-    geocoder.on('error', (e: Error) => console.error(e))
+    map.addControl(locateMeGeocoder);
+    locateMeGeocoder.on('geolocate', setUserLocation);
+    locateMeGeocoder.on('trackuserlocationstart', setUserLocation);
+    locateMeGeocoder.on('error', (e: Error) => console.error(e))
+
+    // Add input control to map
+    map.addControl(inputGeoCoder) 
 
   }, [props.lat, props.lng])
 
