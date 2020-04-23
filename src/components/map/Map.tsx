@@ -1,6 +1,5 @@
 import * as React from 'react'
 import mapboxgl from 'mapbox-gl'
-import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder'
 import { coordinatesReducer, MapCoordinateState } from './hooks/useCoordinatesReducer'
 
 export const Map = (props: MapCoordinateState) => {
@@ -15,10 +14,6 @@ export const Map = (props: MapCoordinateState) => {
       center: [state.lng, state.lat],
       zoom: state.zoom
     })
-
-    const marker = new mapboxgl.Marker() // initialize a new marker
-      .setLngLat([state.lng, state.lat]) // Marker [lng, lat] coordinates
-      .addTo(map); // Add the marker to the map
 
     // After the map style has loaded on the page,
     // add a source layer and default styling for a single point
@@ -53,10 +48,6 @@ export const Map = (props: MapCoordinateState) => {
     geocoder.on('geolocate', setUserLocation);
     geocoder.on('trackuserlocationstart', setUserLocation);
     geocoder.on('error', (e: Error) => console.error(e))
-
-    // Listen for the `result` event from the Geocoder
-    // `result` event is triggered when a user makes a selection
-    //  Add a marker at the result's coordinates
 
   }, [props.lat, props.lng])
 
