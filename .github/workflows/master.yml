@@ -18,7 +18,7 @@ jobs:
 
     - name: NPM Install
       run: |
-        npm install --only=production
+        npm install
 
     - name: Production Build
       run: |
