@@ -2,7 +2,7 @@ import { MapCoordinate } from "../../../types/map/map";
 
 export type MapCoordinateState = MapCoordinate & { zoom: number };
 
-const defaultMapCoordinateState: MapCoordinateState = {
+export const defaultMapCoordinateState: MapCoordinateState = {
   lat: 0,
   lng: 0,
   zoom: 2,

@@ -4,11 +4,12 @@ import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder'
 import { coordinatesReducer, MapCoordinateState } from './hooks/useCoordinatesReducer'
 
 export const Map = (props: MapCoordinateState) => {
-  const [state, dispatch]: [MapCoordinateState, React.Dispatch<any>] = React.useReducer(coordinatesReducer, props)
+  const [state]: [MapCoordinateState, React.Dispatch<any>] = React.useReducer(coordinatesReducer, props)
 
   let mapRef = React.useRef(null)
   let map: mapboxgl.Map
   React.useEffect(() => {
+    // eslint-disable-next-line
     map = new mapboxgl.Map({
       container: mapRef.current!,
       style: 'mapbox://styles/mapbox/streets-v11',
