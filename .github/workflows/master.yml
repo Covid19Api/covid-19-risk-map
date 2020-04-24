@@ -18,11 +18,11 @@ jobs:
 
     - name: NPM Install
       run: |
-        npm install
+        npm install --only=production
 
     - name: Production Build
       run: |
-        npm build
+        npm run build
 
     - name: Deploy to S3
       if: contains(github.ref, 'master')
