@@ -1,3 +1,5 @@
+![CD](https://github.com/Covid19Api/covid-19-risk-map/workflows/CD/badge.svg?branch=master)
+
 # covid-19-risk-map
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
