@@ -32,8 +32,11 @@ jobs:
         npm install
 
     - name: Production Build
-      run: |
-        npm run build
+      run: npm run build --if-present
+
+    - name: Unit test
+      run: npm run test
+      continue-on-error: false
 
     - name: Deploy to S3
       if: contains(github.ref, 'master')
