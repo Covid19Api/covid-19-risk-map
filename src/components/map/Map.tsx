@@ -107,3 +107,14 @@ const riskLevelToLabel = (riskLevelJsonAsString: any) => {
     </dl>
   )
 }
+
+export const riskV4ToLabel = (riskLevelJsonAsString: any) => {
+  const riskLevel = JSON.parse(riskLevelJsonAsString)
+  return (
+    <dl className='riskLevel'>
+      <dt>County:</dt><dd>{riskLevel.county_name}</dd>
+      <dt>Risk level:</dt><dd>{riskLevel.detailedRiskByCity}</dd>
+      <dt>Cases:</dt><dd>{riskLevel.total_cases_by_county}</dd>
+    </dl>
+  )
+}
