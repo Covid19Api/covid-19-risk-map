@@ -6,29 +6,40 @@ const _fetch = async (url: string, options: RequestInit = defaultOptions) => {
   return fetch(url, options);
 };
 
-export const get = async (url: string, data: any) => {
+export const get = async (url: string, params: any) => {
   try {
-    if(data) {
-      url += setQueryParams(data)
+    if (params) {
+      url += setQueryParams(params);
     }
     return await _fetch(url, {
-      ...defaultOptions
+      ...defaultOptions,
     });
   } catch (e) {
-    console.error(`Failed to fetch from ${url}`, e);
+    const errorMessage = `Failed to fetch from ${url} with params: ${JSON.stringify(params)}`;
+    console.error(errorMessage, e);
   }
 };
 
-const setQueryParams = (params: any) => '?' + Object.keys(params).map(param => `${param}=${params[param]}`).join('&')
+const setQueryParams = (params: any) =>
+  "?" +
+  Object.keys(params)
+    .map(
+      (param) =>
+        `${encodeURIComponent(param)}=${encodeURIComponent(params[param])}`
+    )
+    .join("&");
 
-export const post = async (url: string, data: any) => {
+export const post = async (url: string, body: any) => {
   try {
     const response = await _fetch(url, {
       ...defaultOptions,
-      ...{ method: "POST", body: JSON.stringify(data) },
+      ...{ method: "POST", body: JSON.stringify(body) },
     });
     return response.json();
   } catch (e) {
-    console.error(`Failed to post to ${url} with data: ${JSON.stringify(data)}`, e);
+    const errorMessage = `Failed to post to ${url} with body: ${JSON.stringify(
+      body
+    )}`;
+    console.error(errorMessage, e);
   }
 };
