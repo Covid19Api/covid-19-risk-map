@@ -74,10 +74,8 @@ export const Map = (props: MapCoordinateState) => {
   async function queryRiskLevel(e: any) {
 
     const { latitude, longitude } =  e && e.coords ? e.coords : { latitude: 0, longitude: 0 }
-    
     const riskLevel = await riskLevelService.riskLevelByGeoPos(latitude, longitude)
 
-    
     if(riskLevel && riskLevel.city) {
       setPopup(latitude, longitude, JSON.stringify(riskLevel))
     }

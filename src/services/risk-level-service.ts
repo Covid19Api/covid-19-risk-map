@@ -6,10 +6,19 @@ export const riskLevelByGeoPos = async (
   longitude: number
 ) => {
   try {
-  return restClient.post(ENDPOINTS.pois.riskLevelByGeoPos, {
-    latitude,
-    longitude,
-  });
+  // return restClient.post('https://cors-anywhere.herokuapp.com/' + ENDPOINTS.pois.riskLevelByGeoPos, {
+  //   "type": "Feature",
+  //   "geometry": {
+  //     "type": "Point",
+  //     "coordinates": [latitude, longitude]
+  //   }
+  // });
+
+  return {
+    "city": "New York City",
+    "detailedRiskByCity": "high",
+    "currentCasesByCity": "50"
+  }
 } catch(e) {
   const errorMessage = `Failed to fetch riskLevelByGeoPos for: ${{latitude, longitude}})}`
   const err = new Error(errorMessage)
