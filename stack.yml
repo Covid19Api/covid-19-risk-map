@@ -1,0 +1,118 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Description: "AWS CloudFormation deployment of static website resources. Taken from https://github.com/NickolasHKraus/cloudformation-templates/blob/master/static-website-hugo/template.yaml"
+
+Parameters:
+  CustomAcmCertificateArn:
+    Type: String
+    Description: Custom AWS Amazon Certificate Manager Certificate (ACM) Certificate Amazon Resource Number (ARN)
+
+  HTTPRefererSecret:
+    Type: String
+    Default: my-secret-referer-key
+    Description: "HTTP referer header to lock down access to the S3 static website bucket so that only the CloudFront distribution can access it. TODO do not set a default for the secret, this should be passed in via cmdline parameters, or generated using AWS Secrets Manager. See https://aws.amazon.com/premiumsupport/knowledge-center/cloudfront-serve-static-website/ and https://docs.aws.amazon.com/AmazonS3/latest/dev/example-bucket-policies.html#example-bucket-policies-use-case-4 for more information."
+
+  S3BucketURI:
+    Type: String
+    Description: S3 bucket URI
+
+  CNAMEReference:
+    Type: String
+    Description: CNAME for the actual site.
+
+Resources:
+  CloudFrontDistribution:
+    Type: "AWS::CloudFront::Distribution"
+    DependsOn:
+      - S3BucketRoot
+    Properties:
+      DistributionConfig:
+        Aliases:
+          - hourly-journal.yingw787.com
+        DefaultCacheBehavior:
+          AllowedMethods:
+            - GET
+            - HEAD
+          CachedMethods:
+            - GET
+            - HEAD
+          Compress: true
+          DefaultTTL: 0
+          ForwardedValues:
+            Cookies:
+              Forward: none
+            QueryString: false
+          MaxTTL: 0
+          SmoothStreaming: false
+          TargetOriginId: !Sub "S3-Website-${S3BucketURI}.s3-website-${AWS::Region}.amazonaws.com"
+          ViewerProtocolPolicy: redirect-to-https
+        DefaultRootObject: index.html
+        Enabled: true
+        HttpVersion: http2
+        IPV6Enabled: true
+        Origins:
+          - CustomOriginConfig:
+              HTTPPort: 80
+              HTTPSPort: 443
+              OriginKeepaliveTimeout: 5
+              OriginProtocolPolicy: http-only
+              OriginReadTimeout: 30
+              OriginSSLProtocols:
+                - TLSv1
+                - TLSv1.1
+                - TLSv1.2
+            DomainName: !Sub "${S3BucketURI}.s3-website-${AWS::Region}.amazonaws.com"
+            Id: !Sub "S3-Website-${S3BucketURI}.s3-website-${AWS::Region}.amazonaws.com"
+            OriginCustomHeaders:
+              - HeaderName: Referer
+                HeaderValue: !Ref HTTPRefererSecret
+        PriceClass: PriceClass_All
+        ViewerCertificate:
+          AcmCertificateArn: !Ref CustomAcmCertificateArn
+          MinimumProtocolVersion: TLSv1.1_2016
+          SslSupportMethod: sni-only
+
+  Route53RecordSetGroup:
+    Type: "AWS::Route53::RecordSetGroup"
+    Description: "NOTE that for the HostedZoneId of each alias target, it must be the specific hosted zone of CloudFront, not the hosted zone for the Route53 record set. See: https://stackoverflow.com/a/57894862/1497211"
+    Properties:
+      HostedZoneName: yingw787.com.
+      RecordSets:
+        - Name: hourly-journal.yingw787.com
+          Type: A
+          AliasTarget:
+            DNSName: !GetAtt CloudFrontDistribution.DomainName
+            EvaluateTargetHealth: false
+            HostedZoneId: Z2FDTNDATAQYW2
+        - Name: hourly-journal.yingw787.com
+          Type: AAAA
+          AliasTarget:
+            DNSName: !GetAtt CloudFrontDistribution.DomainName
+            EvaluateTargetHealth: false
+            HostedZoneId: Z2FDTNDATAQYW2
+
+  S3BucketPolicy:
+    Type: "AWS::S3::BucketPolicy"
+    Properties:
+      Bucket: !Ref S3BucketRoot
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal: "*"
+            Action: "s3:GetObject"
+            Resource: !Sub ${S3BucketRoot.Arn}/*
+            Condition:
+              StringLike:
+                "aws:Referer":
+                  - Ref: HTTPRefererSecret
+
+  S3BucketRoot:
+    Type: "AWS::S3::Bucket"
+    DeletionPolicy: Delete
+    Properties:
+      AccessControl: Private
+      BucketName: !Ref S3BucketURI
+      WebsiteConfiguration:
+        ErrorDocument: index.html
+        IndexDocument: index.html
