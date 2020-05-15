@@ -1,0 +1,18 @@
+[
+    {
+        "ParameterKey": "S3BucketURI",
+        "ParameterValue": "$MY_S3_BUCKET_URI"
+    },
+    {
+        "ParameterKey": "CustomAcmCertificateArn",
+        "ParameterValue": "$MY_CUSTOM_ACM_CERTIFICATE_ARN"
+    },
+    {
+        "ParameterKey": "HTTPRefererSecret",
+        "ParameterValue": "$MY_HTTP_REFERER_SECRET"
+    },
+    {
+        "ParameterKey": "CNAMEReference",
+        "ParameterValue": "$MY_CNAME_REFERENCE"
+    }
+]
