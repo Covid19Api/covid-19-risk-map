@@ -2,7 +2,7 @@
 
 export AWS_PROFILE=ying.wang
 # Change S3 bucket URI to match the one set up in stack-params.json.
-export AWS_S3_BUCKET_URI=covid19-risk-map
+export AWS_S3_BUCKET_URI=covid19-risk-map-yingw787
 
 check:
 	echo $$(git --version)
@@ -18,7 +18,7 @@ build:
 	npm run-script build
 
 deploy: build
-	aws s3 sync ./build s3://$(AWS_S3_BUCKET_URI) --profile covid19-admin
+	aws s3 sync ./build s3://$(AWS_S3_BUCKET_URI) --profile $(AWS_PROFILE)
 
 # Copy stack-params.example.json to stack-params.json and populate with params
 # as needed.
