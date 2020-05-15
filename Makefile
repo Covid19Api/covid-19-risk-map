@@ -1,6 +1,6 @@
 .PHONY: build deploy
 
-export AWS_PROFILE=covid-19-admin
+export AWS_PROFILE=ying.wang
 # Change S3 bucket URI to match the one set up in stack-params.json.
 export AWS_S3_BUCKET_URI=covid19-risk-map
 
