@@ -7,7 +7,7 @@ const CLIENT_ID = "3tSStBF7ykV59bsSjRCtLUM1"
 const CLIENT_SECRET = "1wL1u5PrwJEQNQoZCeBqerS3"
 
 export const ENDPOINTS = {
-  riskLevelByGeoPos: `${BASE}/pois/risk-level-by-geopos`, // POST
+  riskPolicyUSA: `${BASE}/pois/risk-policy-USA`, // POST
 };
 
 export const riskLevelByGeoPos = async (
@@ -55,19 +55,22 @@ export const riskLevelByGeoPos = async (
     }
 
     const api_response = await fetch(
-      'https://cors-anywhere.herokuapp.com/' + ENDPOINTS.riskLevelByGeoPos,
+      'https://cors-anywhere.herokuapp.com/' + ENDPOINTS.riskPolicyUSA + `?latitude=${latitude_str}&longitude=${longitude_str}`,
       {
-        "method": "POST",
-        "headers": api_headers,
-        "body" : JSON.stringify({
-          "state": "",
-          "latitude": "+40.6700",
-          "longitude": "-73.9400"
-        })
+        "method": "GET",
+        "headers": api_headers
       }
     );
     const api_resp_json = await api_response.json()
-    return api_resp_json;
+
+    const response = {
+      city: api_resp_json.county_name,
+      currentCasesByCity: api_resp_json.total_cases_by_county,
+      detailedRiskByCity: api_resp_json.detailedRiskByCity,
+      percent: api_resp_json.percent
+    }
+
+    return response;
 
 } catch(e) {
   const errorMessage = `Failed to fetch riskLevelByGeoPos for: ${{latitude, longitude}})}`
