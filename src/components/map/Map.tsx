@@ -99,7 +99,7 @@ const riskLevelToLabel = (riskLevelJsonAsString: any) => {
   const riskLevel = JSON.parse(riskLevelJsonAsString)
   return (
     <dl className='riskLevel'>
-      <dt>City:</dt><dd>{riskLevel.city}</dd>
+      <dt>County:</dt><dd>{riskLevel.city}</dd>
       <dt>Risk level:</dt><dd>{riskLevel.detailedRiskByCity}</dd>
       <dt>Cases:</dt><dd>{riskLevel.currentCasesByCity}</dd>
     </dl>
