@@ -90,7 +90,7 @@ export const Map = (props: MapCoordinateState) => {
 
   return (
     <div>
-      <div id='map-container' ref={mapRef} className='mapContainer' />
+      <div style={{height: '92vh'}} id='map-container' ref={mapRef} className='mapContainer' />
     </div>
   )
 }
