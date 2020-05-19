@@ -121,3 +121,5 @@ dist
 
 
 .env
+
+stack-params.json

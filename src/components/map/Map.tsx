@@ -74,10 +74,8 @@ export const Map = (props: MapCoordinateState) => {
   async function queryRiskLevel(e: any) {
 
     const { latitude, longitude } =  e && e.coords ? e.coords : { latitude: 0, longitude: 0 }
-    
     const riskLevel = await riskLevelService.riskLevelByGeoPos(latitude, longitude)
 
-    
     if(riskLevel && riskLevel.city) {
       setPopup(latitude, longitude, JSON.stringify(riskLevel))
     }
@@ -101,7 +99,7 @@ const riskLevelToLabel = (riskLevelJsonAsString: any) => {
   const riskLevel = JSON.parse(riskLevelJsonAsString)
   return (
     <dl className='riskLevel'>
-      <dt>City:</dt><dd>{riskLevel.city}</dd>
+      <dt>County:</dt><dd>{riskLevel.city}</dd>
       <dt>Risk level:</dt><dd>{riskLevel.detailedRiskByCity}</dd>
       <dt>Cases:</dt><dd>{riskLevel.currentCasesByCity}</dd>
     </dl>
