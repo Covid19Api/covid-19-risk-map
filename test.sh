@@ -7,9 +7,15 @@ ACCESS_TOKEN=$(curl -v https://access.xapix.io/oauth2/token -F client_id\=3tSStB
 
 echo $ACCESS_TOKEN
 
+# curl \
+#     -H "Content-Type: application/json" \
+#     -H "Authorization: Bearer ${ACCESS_TOKEN}" \
+#     -X POST \
+#     --data '{"state":"","latitude":"+40.6700","longitude":"-73.9400"}' \
+#     'https://api.xapix.dev/covid-19/pois/risk-level-by-geopos'
+
 curl \
-    -H "Content-Type: application/json" \
-    -H "Authorization: Bearer ${ACCESS_TOKEN}" \
-    -X POST \
-    --data '{"state":"","latitude":"+40.6700","longitude":"-73.9400"}' \
-    'https://api.xapix.dev/covid-19/pois/risk-level-by-geopos'
+    --header 'Content-Type: application/json' \
+    --header "Authorization: Bearer ${ACCESS_TOKEN}" \
+    --request GET \
+    'https://api.xapix.dev/covid-19/pois/riskv5?latitude=+40.73&longitude=-74.00'
